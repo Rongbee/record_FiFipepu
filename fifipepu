@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>寶寶紀錄器</title>
+</head>
+
+<body>
+
+  <h1>寶寶紀錄器</h1>
+
+  <button onclick="recordPupu()">💩 屁屁</button>
+
+  <script>
+
+    const API_URL = "https://script.google.com/macros/s/AKfycbyKLOpc5dKNeKCjFhguUpficE3HVi5fdxZUBOr_fSYw5Y2lrTVbzj7uKzjhwwkp8B-i-Q/exec";
+
+    function recordPupu() {
+
+      fetch(API_URL + "?type=pupu");
+
+    }
+
+  </script>
+
+</body>
+</html>
