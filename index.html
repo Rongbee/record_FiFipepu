@@ -11,6 +11,10 @@
 
   <button onclick="recordPupu()">💩 屁屁</button>
 
+  <br><br>
+
+  <button onclick="recordPipi()">💦 尿尿</button>
+
   <script>
 
     const API_URL = "https://script.google.com/macros/s/AKfycbyKLOpc5dKNeKCjFhguUpficE3HVi5fdxZUBOr_fSYw5Y2lrTVbzj7uKzjhwwkp8B-i-Q/exec";
@@ -18,21 +22,11 @@
     function recordPupu() {
 
       fetch(API_URL + "?type=pupu");
-
     }
-
-  </script>
-  <br>
-  <button onclick="recordPipi()">💦 尿尿</button>
-
-  <script>
-
-    const API_URL = "https://script.google.com/macros/s/AKfycbyKLOpc5dKNeKCjFhguUpficE3HVi5fdxZUBOr_fSYw5Y2lrTVbzj7uKzjhwwkp8B-i-Q/exec";
 
     function recordPipi() {
 
       fetch(API_URL + "?type=pipi");
-
     }
 
   </script>
