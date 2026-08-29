@@ -1,34 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>寶寶紀錄器</title>
+  <!-- 加入 Viewport 讓手機端按鈕自動放大，方便單手按壓 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>霏寶紀錄器</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    .btn {
+      font-size: 1.5rem;
+      padding: 15px 30px;
+      margin: 10px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      width: 80%;
+      max-width: 300px;
+    }
+    .btn-pupu { background-color: #ffeaa7; }
+    .btn-pipi { background-color: #74b9ff; color: white; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  </style>
 </head>
 
 <body>
 
-  <h1>寶寶紀錄器</h1>
+  <h1>👶 霏寶紀錄器</h1>
 
-  <button onclick="recordPupu()">💩 屁屁</button>
-
-  <br><br>
-
-  <button onclick="recordPepe()">💦 尿尿</button>
+  <button id="btnPupu" class="btn btn-pupu" onclick="sendRecord('pupu', 'btnPupu', '💩 大便')">💩 大便</button>
+  <br>
+  <button id="btnPepe" class="btn btn-pepe" onclick="sendRecord('pepe', 'btnPepe', '💦 尿尿')">💦 尿尿</button>
 
   <script>
-
     const API_URL = "https://script.google.com/macros/s/AKfycbyKLOpc5dKNeKCjFhguUpficE3HVi5fdxZUBOr_fSYw5Y2lrTVbzj7uKzjhwwkp8B-i-Q/exec";
 
-    function recordPupu() {
+    function sendRecord(type, btnId, originalText) {
+      const btn = document.getElementById(btnId);
+      
+      // 防止重複快速點擊
+      btn.disabled = true;
+      btn.innerText = "寫入中...";
 
-      fetch(API_URL + "?type=pupu");
+      // 使用 mode: 'no-cors' 避免 GAS 跨網域回應被瀏覽器擋下
+      fetch(API_URL + "?type=" + type, { mode: 'no-cors' })
+        .then(() => {
+          btn.innerText = "✅ 已記錄！";
+          setTimeout(() => {
+            btn.innerText = originalText;
+            btn.disabled = false;
+          }, 1500);
+        })
+        .catch(err => {
+          alert("記錄失敗，請檢查網路連線！");
+          btn.innerText = originalText;
+          btn.disabled = false;
+        });
     }
-
-    function recordPepe() {
-
-      fetch(API_URL + "?type=pepe");
-    }
-
   </script>
 
 </body>
