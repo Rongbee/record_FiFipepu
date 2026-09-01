@@ -24,19 +24,32 @@
       max-width: 300px;
     }
     .btn-pupu { background-color: #ffeaa7; }
-    .btn-pipi { background-color: #74b9ff; color: white; }
+    .btn-pepe { background-color: #74b9ff; color: white; }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
   </style>
 </head>
 
 <body>
-
-  <h1>👶 霏寶紀錄器</h1>
-
+ 
+  <h1>👶 霏寶紀錄器(V11)</h1>
+ 
   <button id="btnPupu" class="btn btn-pupu" onclick="sendRecord('pupu', 'btnPupu', '💩 大便')">💩 大便</button>
   <br>
   <button id="btnPepe" class="btn btn-pepe" onclick="sendRecord('pepe', 'btnPepe', '💦 尿尿')">💦 尿尿</button>
-
+  <br><br>
+	<h2>今日統計</h2>
+	  <div class="count">
+		💩 大便：
+		<span id="pupuCount">0</span>
+		次
+	  </div>
+	  <div class="count">
+		💦 尿尿：
+		<span id="pepeCount">0</span>
+		次
+	  </div>
+	  <br>
+		
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzlpCX_Ffmmrg7b2nKbvpsAiQBVYcCT0Zap4CR1HhXvEH4RPJyh2WEGFWeCq7Gvvcbcxg/exec";
 
@@ -44,20 +57,39 @@
       const btn = document.getElementById(btnId);
       
       // 防止重複快速點擊
+	  
       btn.disabled = true;
       btn.innerText = "寫入中...";
 
-      // 使用 mode: 'no-cors' 避免 GAS 跨網域回應被瀏覽器擋下
-      fetch(API_URL + "?type=" + type, { mode: 'no-cors' })
-        .then(() => {
+      // 不使用 mode: 'no-cors'  GAS 跨網域回應可能被瀏覽器擋下
+      fetch(API_URL + "?type=" + type)
+	  // 把 GAS 回傳的 JSON 解析成 JavaScript 物件
+        .then(response => response.json())
+	  // 取得統計資料
+        .then(data => {
+          console.log("GAS 回傳：", data);
+          // ========================================
+          // 更新今日統計
+          // ========================================
+          document.getElementById("pupuCount").innerText =
+            data.pupu;
+          document.getElementById("pepeCount").innerText =
+            data.pepe;
+          // ========================================
+          // 顯示成功
+          // ========================================
           btn.innerText = "✅ 已記錄！";
+          // ========================================
+          // 1.5 秒後恢復按鈕
+          // ========================================
           setTimeout(() => {
             btn.innerText = originalText;
             btn.disabled = false;
           }, 1500);
         })
-        .catch(err => {
-          alert("記錄失敗，請檢查網路連線！");
+        .catch(error => {
+          console.error("錯誤：", error);
+		  alert("記錄失敗，請檢查網路連線！");
           btn.innerText = originalText;
           btn.disabled = false;
         });
