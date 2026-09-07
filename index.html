@@ -1,57 +1,1048 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
   <meta charset="UTF-8">
-  <!-- 加入 Viewport 讓手機端按鈕自動放大，方便單手按壓 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>霏寶紀錄器</title>
+
   <style>
+
+    /* =========================
+       全部頁面
+       ========================= */
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      text-align: center;
+      margin: 0;
+      min-height: 100vh;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      background: #f3eee7;
+
+      font-family:
+        "Noto Sans TC",
+        "Microsoft JhengHei",
+        sans-serif;
+    }
+
+
+    /* =========================
+       最外層
+       ========================= */
+
+    .calculator {
+      width: min(430px, 95vw);
+
+      background: #40352f;
+
       padding: 20px;
-      background-color: #f9f9f9;
+
+      border-radius: 28px;
+
+      box-shadow:
+        0 20px 50px rgba(0, 0, 0, .20);
     }
-    .btn {
-      font-size: 1.5rem;
-      padding: 15px 30px;
-      margin: 10px;
+
+
+    /* =========================
+       標題
+       ========================= */
+
+    .title {
+      color: white;
+
+      text-align: center;
+
+      font-size: 32px;
+
+      font-weight: bold;
+
+      margin-bottom: 20px;
+    }
+
+
+    /* =========================
+       餵奶螢幕
+       ========================= */
+
+    .screen {
+
+      background: #292724;
+
+      padding: 18px;
+
+      margin-bottom: 18px;
+
+      border-radius: 20px;
+
+      min-height: 190px;
+    }
+
+    .screen-title {
+
+      color: #ddd;
+
+      text-align: center;
+
+      font-size: 18px;
+
+      margin-bottom: 14px;
+    }
+
+    .screen-content {
+
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 12px;
+    }
+
+    .info-box {
+
+      background: #35332f;
+
+      padding: 14px;
+
+      border-radius: 18px;
+
+      text-align: center;
+    }
+
+    .info-label {
+
+      color: #aaa;
+
+      font-size: 15px;
+
+      margin-bottom: 8px;
+    }
+
+    .feeding-value {
+
+      color: #f7dfb0;
+
+      font-size: 28px;
+
+      font-weight: bold;
+    }
+
+    .cc-value {
+
+      color: #d7ead8;
+
+      font-size: 42px;
+
+      font-weight: bold;
+    }
+
+    .cc-unit {
+
+      color: #ddd;
+
+      font-size: 16px;
+    }
+
+	/* =========================
+	   今日總奶量
+	   ========================= */
+
+	.today-total {
+
+	  margin-top: 12px;
+
+	  background: #35332f;
+
+	  padding: 12px;
+
+	  border-radius: 18px;
+
+	  text-align: center;
+	}
+
+
+	.today-total-label {
+
+	  color: #aaa;
+
+	  font-size: 14px;
+
+	  margin-bottom: 3px;
+	}
+
+
+	.today-total-value {
+
+	  color: #d7ead8;
+
+	  font-size: 28px;
+
+	  font-weight: bold;
+	}
+
+
+	.today-total-unit {
+
+	  color: #ddd;
+
+	  font-size: 14px;
+
+	  font-weight: normal;
+	}
+
+    /* =========================
+       餵奶按鈕區
+       ========================= */
+
+    .buttons {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 10px;
+    }
+
+
+    /* =========================
+       一般按鈕
+       ========================= */
+
+    button {
+
       border: none;
-      border-radius: 12px;
+
+      border-radius: 15px;
+
+      min-height: 65px;
+
+      font-size: 22px;
+
+      font-weight: bold;
+
       cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      width: 80%;
-      max-width: 300px;
+
+      background: #f5f2ed;
+
+      color: #40352f;
+
+      box-shadow:
+        0 4px 0 #cfc8bf;
+
+      transition: .08s;
     }
-    .btn-pupu { background-color: #ffeaa7; }
-    .btn-pepe { background-color: #74b9ff; color: white; }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    button:active {
+
+      transform: translateY(4px);
+
+      box-shadow:
+        0 0 0 #cfc8bf;
+    }
+
+
+    /* =========================
+       餵奶種類
+       ========================= */
+
+    .feed-btn {
+
+      font-size: 18px;
+
+      background: #e8ddd0;
+    }
+
+    .feed-btn.active {
+
+      background: #8c7562;
+
+      color: white;
+
+      box-shadow:
+        0 4px 0 #655447;
+    }
+
+
+    /* =========================
+       +10 / -10
+       ========================= */
+
+    .plus {
+
+      background: #d7e4d6;
+
+      color: #38503a;
+
+      box-shadow:
+        0 4px 0 #a9bca8;
+    }
+
+    .minus {
+
+      background: #ead9d5;
+
+      color: #633f39;
+
+      box-shadow:
+        0 4px 0 #c1aaa5;
+    }
+
+
+    /* =========================
+       重新
+       ========================= */
+
+    .reset {
+
+      background: #ddd8d2;
+
+      font-size: 18px;
+    }
+
+
+    /* =========================
+       ENTER
+       ========================= */
+
+    .enter {
+
+      grid-column: span 2;
+
+      background: #53695b;
+
+      color: white;
+
+      box-shadow:
+        0 4px 0 #35463c;
+
+      font-size: 22px;
+    }
+
+
+    /* =========================
+       分隔線
+       ========================= */
+
+    .divider {
+
+      height: 1px;
+
+      background: #6b5c53;
+
+      margin: 28px 5px 22px;
+    }
+
+
+    /* =========================
+       今日屁屁紀錄
+       ========================= */
+
+    .diaper-section {
+
+      background: #594b43;
+
+      padding: 18px;
+
+      border-radius: 22px;
+    }
+
+    .diaper-title {
+
+      color: white;
+
+      text-align: center;
+
+      font-size: 23px;
+
+      font-weight: bold;
+
+      margin-bottom: 16px;
+    }
+
+
+    /* =========================
+       大便 / 尿尿統計
+       ========================= */
+
+    .diaper-counts {
+
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 12px;
+
+      margin-bottom: 14px;
+    }
+
+    .diaper-box {
+
+      background: #35302c;
+
+      padding: 15px;
+
+      border-radius: 18px;
+
+      text-align: center;
+    }
+
+    .diaper-label {
+
+      color: white;
+
+      font-size: 18px;
+
+      margin-bottom: 5px;
+    }
+
+    .diaper-number {
+
+      font-size: 38px;
+
+      font-weight: bold;
+    }
+
+    .pupu-number {
+
+      color: #f7d77c;
+    }
+
+    .pepe-number {
+
+      color: #9ed9f5;
+    }
+
+    .diaper-unit {
+
+      color: #ddd;
+
+      font-size: 15px;
+    }
+
+
+    /* =========================
+       屁屁按鈕
+       ========================= */
+
+    .diaper-buttons {
+
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 10px;
+    }
+
+    .pupu-btn {
+
+      background: #ffe28a;
+
+      color: #493b27;
+
+      box-shadow:
+        0 4px 0 #d1b65f;
+
+      font-size: 19px;
+    }
+
+    .pepe-btn {
+
+      background: #9edaf7;
+
+      color: #24485b;
+
+      box-shadow:
+        0 4px 0 #6fa8c6;
+
+      font-size: 19px;
+    }
+
+
+    /* =========================
+       頁尾
+       ========================= */
+
+    .footer {
+
+      color: #cfc3bb;
+
+      text-align: center;
+
+      font-size: 14px;
+
+      margin-top: 18px;
+    }
+
+
+    /* =========================
+       手機尺寸
+       ========================= */
+
+    @media (max-width: 380px) {
+
+      .calculator {
+        padding: 14px;
+      }
+
+      button {
+        min-height: 58px;
+
+        font-size: 19px;
+      }
+
+      .cc-value {
+        font-size: 34px;
+      }
+
+      .feeding-value {
+        font-size: 22px;
+      }
+
+      .title {
+        font-size: 27px;
+      }
+
+    }
+
   </style>
+
 </head>
 
+
 <body>
- 
-  <h1>👶 霏寶紀錄器(V11)</h1>
- 
-  <button id="btnPupu" class="btn btn-pupu" onclick="sendRecord('pupu', 'btnPupu', '💩 大便')">💩 大便</button>
-  <br>
-  <button id="btnPepe" class="btn btn-pepe" onclick="sendRecord('pepe', 'btnPepe', '💦 尿尿')">💦 尿尿</button>
-  <br><br>
-	<h2>今日統計</h2>
-	  <div class="count">
-		💩 大便：
-		<span id="pupuCount">0</span>
-		次
+
+
+  <div class="calculator">
+
+
+    <!-- =====================
+         標題
+         ===================== -->
+
+    <div class="title">
+      👶 霏寶紀錄器
+    </div>
+
+
+    <!-- =====================
+         餵奶螢幕
+         ===================== -->
+
+    <div class="screen">
+
+      <div class="screen-title">
+        寶寶餵食紀錄
+      </div>
+
+
+      <div class="screen-content">
+
+
+        <div class="info-box">
+
+          <div class="info-label">
+            餵食狀態
+          </div>
+
+          <div
+            id="feedingDisplay"
+            class="feeding-value"
+          >
+            未選擇
+          </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+          <div class="info-label">
+            餵食量
+          </div>
+
+          <div>
+
+            <span
+              id="ccDisplay"
+              class="cc-value"
+            >
+              0
+            </span>
+
+            <span class="cc-unit">
+              CC
+            </span>
+
+          </div>
+
+        </div>
+
+
+      </div>
+	  <!-- 今日總奶量 -->
+	  <div class="today-total">
+	  <div class="today-total-label">
+		今日總奶量
 	  </div>
-	  <div class="count">
-		💦 尿尿：
-		<span id="pepeCount">0</span>
-		次
+
+	  <div class="today-total-value">
+		<span id="todayTotal">0</span>
+		<span class="today-total-unit">CC</span>
 	  </div>
-	  <br>
-		
+	  </div>
+
+    </div>
+
+
+    <!-- =====================
+         餵奶按鈕
+         ===================== -->
+
+    <div class="buttons">
+
+      <button
+        class="feed-btn"
+        data-feed="瓶餵母乳"
+      >
+        瓶餵母乳
+      </button>
+
+
+      <button
+        class="feed-btn"
+        data-feed="配方奶"
+      >
+        配方奶
+      </button>
+
+
+      <button
+        class="feed-btn"
+        data-feed="親餵"
+      >
+        親餵
+      </button>
+
+
+      <button onclick="setCC(30)">
+        30
+      </button>
+
+
+      <button onclick="setCC(60)">
+        60
+      </button>
+
+
+      <button onclick="setCC(90)">
+        90
+      </button>
+
+
+      <button onclick="setCC(120)">
+        120
+      </button>
+
+
+      <button onclick="setCC(150)">
+        150
+      </button>
+
+
+      <button onclick="setCC(180)">
+        180
+      </button>
+
+
+      <button onclick="setCC(210)">
+        210
+      </button>
+
+      <button
+        class="plus"
+        onclick="changeCC(10)"
+      >
+        +10
+      </button>
+
+
+      <button
+        class="minus"
+        onclick="changeCC(-10)"
+      >
+        -10
+      </button>
+
+
+      <button
+        class="reset"
+        onclick="resetCalculator()"
+      >
+        修改
+      </button>
+
+
+      <button
+		id="btnEnter"
+        class="enter"
+        onclick="submitRecord()"
+      >
+        ENTER 記錄餵食
+      </button>
+
+
+    </div>
+
+
+    <!-- =====================
+         分隔線
+         ===================== -->
+
+    <div class="divider"></div>
+
+
+    <!-- =====================
+         今日屁屁紀錄
+         ===================== -->
+
+    <div class="diaper-section">
+
+
+      <div class="diaper-title">
+        🚼 今日屁屁紀錄
+      </div>
+
+
+      <!-- 統計 -->
+
+      <div class="diaper-counts">
+
+
+        <div class="diaper-box">
+
+          <div class="diaper-label">
+            💩 大便
+          </div>
+
+          <span
+            id="pupuCount"
+            class="diaper-number pupu-number"
+          >
+            0
+          </span>
+
+          <span class="diaper-unit">
+            次
+          </span>
+
+        </div>
+
+
+        <div class="diaper-box">
+
+          <div class="diaper-label">
+            💧 尿尿
+          </div>
+
+          <span
+            id="pepeCount"
+            class="diaper-number pepe-number"
+          >
+            0
+          </span>
+
+          <span class="diaper-unit">
+            次
+          </span>
+
+        </div>
+
+
+      </div>
+
+
+      <!-- 屁屁按鈕 -->
+
+      <div class="diaper-buttons">
+
+
+        <button
+		  id="btnPupu"
+          class="pupu-btn"
+          onclick="sendRecord('pupu', 'btnPupu', '💩 大便 +1')"
+        >
+          💩 大便 +1
+        </button>
+
+
+        <button
+		  id="btnPepe"
+          class="pepe-btn"
+          onclick="sendRecord('pepe', 'btnPepe', '💧 尿尿 +1')"
+        >
+          💧 尿尿 +1
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+
+    <!-- =====================
+         Footer
+         ===================== -->
+
+    <div class="footer">
+      記錄寶寶的每一個成長時刻 ♥
+    </div>
+
+
+  </div>
+
+
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzlpCX_Ffmmrg7b2nKbvpsAiQBVYcCT0Zap4CR1HhXvEH4RPJyh2WEGFWeCq7Gvvcbcxg/exec";
+
+
+    /* =========================
+       餵奶計算機
+       ========================= */
+
+    let feedingType = "";
+
+    let cc = 0;
+
+
+    function updateDisplay() {
+
+      document
+        .getElementById("ccDisplay")
+        .textContent = cc;
+
+    }
+
+
+    function setCC(value) {
+
+      cc += value;
+
+      updateDisplay();
+
+    }
+
+
+    function changeCC(value) {
+
+      cc += value;
+
+      if (cc < 0) {
+
+        cc = 0;
+
+      }
+
+      updateDisplay();
+
+    }
+
+
+    /* =========================
+       餵奶種類按鈕
+       ========================= */
+
+    const feedButtons =
+      document.querySelectorAll(".feed-btn");
+
+
+    feedButtons.forEach(button => {
+
+      button.addEventListener(
+        "click",
+        function() {
+
+          feedingType =
+            this.dataset.feed;
+
+
+          feedButtons.forEach(btn => {
+
+            btn.classList.remove("active");
+
+          });
+
+
+          this.classList.add("active");
+
+
+          document
+            .getElementById("feedingDisplay")
+            .textContent = feedingType;
+
+        }
+      );
+
+    });
+
+
+    /* =========================
+       重新
+       ========================= */
+
+    function resetCalculator() {
+
+      feedingType = "";
+
+      cc = 0;
+
+      updateDisplay();
+
+
+      document
+        .getElementById("feedingDisplay")
+        .textContent = "未選擇";
+
+
+      feedButtons.forEach(button => {
+
+        button.classList.remove("active");
+
+      });
+
+    }
+
+
+    /* =========================
+       ENTER
+       ========================= */
+
+    const API_URL = "https://script.google.com/macros/s/AKfycbyUR5zBb52Ry-dWDf6pscsekHQ4kmLhVTLjW5Ob6aUw11rQaatBF2ySJTa67e7bALKcMA/exec";
+
+
+	function submitRecord() {
+	  const btn = document.getElementById("btnEnter");
+  // =========================
+  // 檢查資料
+  // =========================
+	  if (!feedingType) {
+		alert("請先選擇餵食狀態");
+		return;
+	  }
+
+	  if (cc <= 0) {
+		alert("請輸入餵食量");
+		return;
+	  }
+
+  // =========================
+  // 防止重複快速點擊
+  // =========================
+
+	  btn.disabled = true;
+	  btn.innerText = "寫入中...";
+
+  // =========================
+  // 呼叫 API
+  // =========================
+
+	  fetch(
+		API_URL +
+		"?feedingType=" +
+		encodeURIComponent(feedingType) +
+		"&cc=" +
+		cc
+	  )
+	  
+  // API 回傳 JSON
+	  .then(response => response.json())
+  // 取得 API 資料
+	  .then(data => {
+	    console.log("奶量 API 回傳：", data);
+
+		if (data.success) {
+
+      // =========================
+      // 更新今日總奶量
+      // =========================
+
+		  document.getElementById(
+			"todayTotal"
+		  ).textContent = data.todayTotal;
+
+
+      // =========================
+      // 顯示成功
+      // =========================
+	      btn.innerText = "✅ 已記錄！";
+
+		  alert(
+			"✅ 記錄成功！\n\n" +
+			"哺餵方式：" + data.feedingType + "\n" +
+			"本次奶量：" + data.cc + " CC\n\n" +
+			"今日總奶量：" +
+			data.todayTotal +
+			" CC"
+		  );
+		  
+        // =========================
+        // 1.5 秒後恢復按鈕
+        // =========================
+
+		  setTimeout(() => {
+
+          btn.innerText = "ENTER";
+          btn.disabled = false;
+
+          }, 1500);
+		
+		} else {
+	
+        // =========================
+        // API 回報失敗
+        // =========================
+
+		  alert("❌ 記錄失敗：" + data.error);
+          
+		  btn.innerText = "ENTER";
+          btn.disabled = false;
+
+		}
+
+	  })
+	  
+    // =========================
+    // API 連線錯誤
+    // =========================
+
+	  .catch(error => {
+
+		console.error(error);
+
+		alert("❌ API 連線失敗");
+		
+	    btn.innerText = "ENTER";
+		btn.disabled = false;
+
+	  });
+
+	}
+
+
+    /* =========================
+       屁屁紀錄
+       ========================= */
+	   
+	const API_URL_PUPU = "https://script.google.com/macros/s/AKfycbzlpCX_Ffmmrg7b2nKbvpsAiQBVYcCT0Zap4CR1HhXvEH4RPJyh2WEGFWeCq7Gvvcbcxg/exec";
 
     function sendRecord(type, btnId, originalText) {
       const btn = document.getElementById(btnId);
@@ -62,7 +1053,7 @@
       btn.innerText = "寫入中...";
 
       // 不使用 mode: 'no-cors'  GAS 跨網域回應可能被瀏覽器擋下
-      fetch(API_URL + "?type=" + type)
+      fetch(API_URL_PUPU + "?type=" + type)
 	  // 把 GAS 回傳的 JSON 解析成 JavaScript 物件
         .then(response => response.json())
 	  // 取得統計資料
@@ -93,8 +1084,15 @@
           btn.innerText = originalText;
           btn.disabled = false;
         });
-    }
+    }	
+
+
+
+
+
   </script>
 
+
 </body>
+
 </html>
